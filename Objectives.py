@@ -27,7 +27,6 @@ def F_experience__G_skill(x, params):
     Fexperience = 0.0
     t_assign = x[1]
     TREQ_exp = np.empty(shape=(m,p))
-    t_exp = np.empty(shape=m)
     for i in range(0,m):
         ti_exp = 0
         # calculate ti_assigned
@@ -51,14 +50,20 @@ def F_experience__G_skill(x, params):
                     continue
                 lexp_ik_max = max(lexp_ik_max, LEXP[j][k])
                 sum_lexp_ik += LEXP[j][k]
-
-            TREQ_exp[i][k] = lexp_ik_max + sum_lexp_ik/ti_assigned
+            if ti_assigned > 0:
+                TREQ_exp[i][k] = lexp_ik_max + sum_lexp_ik/ti_assigned
+            else    :
+                TREQ_exp[i][k] = 0
             ti_exp += TREQ_exp[i][k]
             if TREQ_exp[i][k] == 0:
                 # sviolation : TREQ_ik = 1 & TREQ_ik_exp = 0
                 ti_sviolation += 1
-        t_sviolation[i] = ti_sviolation/ti_skills
-        ti_exp /= ti_skills
+        if ti_skills > 0 :
+            t_sviolation[i] = ti_sviolation/ti_skills
+            ti_exp /= ti_skills
+        else:
+            t_sviolation[i] = 0
+            ti_exp = 0
         Fexperience += ti_exp
         Gskill += t_sviolation[i]
     return Fexperience/m, Gskill/m

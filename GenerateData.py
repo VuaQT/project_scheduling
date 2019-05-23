@@ -55,12 +55,16 @@ LEXP = np.zeros((n,p))
 
 for i in range(0,n):
     for j in range(0,p):
-        LEXP[i,j] = random.randint(0,100) / 100.0;
+        r = random.randint(0,10)
+        if r < 4:
+            LEXP[i,j] = random.randint(0,100) / 100.0
+        else :
+            LEXP[i,j] = 0
 
 print LEXP
 
 
-f= open("data.txt","w+")
+f= open("data10.txt","w+")
 
 f.write("Data for problem : Optimize assignment and schedule for project in software")
 
